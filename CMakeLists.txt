@@ -74,6 +74,11 @@ option(build_as_dynamic "build the IoT SDK libaries as dynamic"  OFF)
 option(build_network_e2e "build network E2E tests" OFF)
 option(use_prov_client "Enable provisioning client" OFF)
 option(use_tpm_simulator "tpm simulator type of hsm used with the provisioning client" OFF)
+option(use_custom_heap "use externally defined heap functions instead of the malloc family" OFF)
+
+if(${use_custom_heap})
+    add_definitions(-DGB_USE_CUSTOM_HEAP)
+endif()
 
 message(STATUS "Provisioning client ${use_prov_client}")
 if (XCODE AND ${use_prov_client})
@@ -331,6 +336,15 @@ if (${use_installed_dependencies})
     configure_file("configs/${PROJECT_NAME}Config.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}Config.cmake"
         COPYONLY
+    )
+
+    install(FILES ${parson_h_install_files}
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/azureiot
+    )
+    install(TARGETS ${parson_install_libs} EXPORT azure_iot_sdksTargets
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/azureiot
     )
 
     install(EXPORT azure_iot_sdksTargets

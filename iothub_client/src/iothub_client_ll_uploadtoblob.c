@@ -17,15 +17,14 @@
 #include "azure_c_shared_utility/shared_util_options.h"
 #include "azure_c_shared_utility/urlencode.h"
 
-#include "iothub_client_ll.h"
+#include "iothub_client_core_ll.h"
 #include "iothub_client_options.h"
-#include "iothub_client_private.h"
+#include "internal/iothub_client_private.h"
 #include "iothub_client_version.h"
 #include "iothub_transport_ll.h"
 #include "parson.h"
-#include "iothub_client_ll_uploadtoblob.h"
-#include "blob.h"
-
+#include "internal/iothub_client_ll_uploadtoblob.h"
+#include "internal/blob.h"
 
 #ifdef WINCE
 #include <stdarg.h>
@@ -532,36 +531,36 @@ static int IoTHubClient_LL_UploadToBlob_step1and2(IOTHUB_CLIENT_LL_UPLOADTOBLOB_
                                                                         {
                                                                             /*Codes_SRS_IOTHUBCLIENT_LL_32_008: [ The returned file name shall be URL encoded before passing back to the cloud. ]*/
                                                                             STRING_HANDLE fileName = URL_EncodeString(json_blobName);
-																			
-																			if (fileName == NULL)
-																			{
+                                                                            
+                                                                            if (fileName == NULL)
+                                                                            {
                                                                                 /*Codes_SRS_IOTHUBCLIENT_LL_32_009: [ If URL_EncodeString fails then IoTHubClient_LL_UploadMultipleBlocksToBlob(Ex) shall fail and return IOTHUB_CLIENT_ERROR. ]*/
-																				LogError("unable to URL_EncodeString of filename");
-																				result = __FAILURE__;
-																			}
+                                                                                LogError("unable to URL_EncodeString of filename");
+                                                                                result = __FAILURE__;
+                                                                            }
 
                                                                             else 
-																			{
-																				if (!(
-																					(STRING_concat(sasUri, json_hostName) == 0) &&
-																					(STRING_concat(sasUri, "/") == 0) &&
-																					(STRING_concat(sasUri, json_containerName) == 0) &&
-																					(STRING_concat(sasUri, "/") == 0) &&
-																					(STRING_concat(sasUri, STRING_c_str(fileName)) == 0) &&
-																					(STRING_concat(sasUri, json_sasToken) == 0)
-																					))
-																				{
-																					/*Codes_SRS_IOTHUBCLIENT_LL_02_082: [ If extracting and saving the correlationId or SasUri fails then IoTHubClient_LL_UploadMultipleBlocksToBlob(Ex) shall fail and return IOTHUB_CLIENT_ERROR. ]*/
-																					LogError("unable to STRING_concat");
-																					result = __FAILURE__;
-																				}
-																				else
-																				{
-																					result = 0; /*success in step 1*/
-																				}
-																				
-																				STRING_delete(fileName);
-																			}	
+                                                                            {
+                                                                                if (!(
+                                                                                    (STRING_concat(sasUri, json_hostName) == 0) &&
+                                                                                    (STRING_concat(sasUri, "/") == 0) &&
+                                                                                    (STRING_concat(sasUri, json_containerName) == 0) &&
+                                                                                    (STRING_concat(sasUri, "/") == 0) &&
+                                                                                    (STRING_concat(sasUri, STRING_c_str(fileName)) == 0) &&
+                                                                                    (STRING_concat(sasUri, json_sasToken) == 0)
+                                                                                    ))
+                                                                                {
+                                                                                    /*Codes_SRS_IOTHUBCLIENT_LL_02_082: [ If extracting and saving the correlationId or SasUri fails then IoTHubClient_LL_UploadMultipleBlocksToBlob(Ex) shall fail and return IOTHUB_CLIENT_ERROR. ]*/
+                                                                                    LogError("unable to STRING_concat");
+                                                                                    result = __FAILURE__;
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    result = 0; /*success in step 1*/
+                                                                                }
+                                                                                
+                                                                                STRING_delete(fileName);
+                                                                            }	
                                                                         }
                                                                     }
                                                                 }

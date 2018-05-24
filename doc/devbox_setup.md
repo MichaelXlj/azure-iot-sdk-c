@@ -58,9 +58,9 @@ cd azure-iot-sdk-c
 mkdir cmake
 cd cmake
 # Either
-  cmake -G "Visual Studio 14 2015" .. ## For Visual Studio 2015
+  cmake .. -G "Visual Studio 14 2015" .. ## For Visual Studio 2015
 # or
-  cmake -G "Visual Studio 15 2017" .. ## For Visual Studio 2017
+  cmake .. -G "Visual Studio 15 2017" .. ## For Visual Studio 2017
 ```
 
 > This builds x86 libraries. To build for x64 for Visual Studio 2015, modify the cmake generator argument: `cmake .. -G "Visual Studio 14 2015 Win64"` or for Visual Studio 2017, `cmake .. -G "Visual Studio 15 2017 Win64"`
@@ -335,6 +335,14 @@ All of the CMake options described above will work for XCode generation as well.
 When project generation completes you will see an XCode project file (.xcodeproj) under 
 the `cmake` folder. To build the SDK, open **cmake\azure_iot_sdks.xcodeproj** in XCode and 
 use XCode's build and run features.
+
+**Note:** Until Mac updates the Curl library to version to 7.58 or greater it will also be necessary
+to modify your XCode project file (.xcodeproj) to replace all the lines that read</br>
+`LIBRARY_SEARCH_PATHS = "";`</br>
+with</br>
+`LIBRARY_SEARCH_PATHS = "/usr/local/Cellar/curl/7.58.0/lib";`</br>
+
+The example above assumes curl 7.58 has been compiled and saved into `/usr/local/Cellar/curl/7.58.0`. For more details please see section "Upgrade CURL on Mac OS".
 
 <a name="windowsce"></a>
 

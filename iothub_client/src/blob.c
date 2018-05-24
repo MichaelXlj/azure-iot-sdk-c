@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "azure_c_shared_utility/gballoc.h"
-#include "blob.h"
+#include "internal/blob.h"
+#include "internal/iothub_client_ll_uploadtoblob.h"
 
 #include "azure_c_shared_utility/httpapiex.h"
 #include "azure_c_shared_utility/xlogging.h"

@@ -14,7 +14,7 @@
 #include "azure_c_shared_utility/shared_util_options.h"
 #include "azure_c_shared_utility/http_proxy_io.h"
 
-#include "iothub_client_hsm_ll.h"
+#include "iothub_client_ll.h"
 #include "azure_prov_client/prov_device_ll_client.h"
 #include "azure_prov_client/prov_security_factory.h"
 
@@ -206,7 +206,7 @@ int main()
         }
 
         //bool traceOn = true;
-        //Prov_Device_LL_SetOption(handle, OPTION_LOG_TRACE, &traceOn);
+        //Prov_Device_LL_SetOption(handle, PROV_OPTION_LOG_TRACE, &traceOn);
 #ifdef SET_TRUSTED_CERT_IN_SAMPLES
         // Setting the Trusted Certificate.  This is only necessary on system with without
         // built in certificate stores.
