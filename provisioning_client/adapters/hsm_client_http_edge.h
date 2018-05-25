@@ -23,11 +23,11 @@ MOCKABLE_FUNCTION(, int, hsm_client_http_edge_sign_data, HSM_CLIENT_HANDLE, hand
 MOCKABLE_FUNCTION(, const char*, hsm_client_http_edge_get_trusted_certificates, HSM_CLIENT_HANDLE, handle);
 
 // NOTE: HSM_HTTP_EDGE_SIGNING_CONTEXT is in header file *only* for unit testing.  Other components should not consume directly.
-typedef struct HSM_HTTP_EDGE_SIGNING_CONTEXT_TAG
+typedef struct HSM_HTTP_WORKLOAD_CONTEXT_TAG
 {
     bool continue_running;
     BUFFER_HANDLE http_response;
-} HSM_HTTP_EDGE_SIGNING_CONTEXT;
+} HSM_HTTP_WORKLOAD_CONTEXT;
 
 #ifdef __cplusplus
 }
