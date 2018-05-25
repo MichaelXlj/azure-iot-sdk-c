@@ -523,9 +523,9 @@ int hsm_client_http_edge_sign_data(HSM_CLIENT_HANDLE handle, const unsigned char
         }
     }
 
-    STRING_delete(uri_path);
     BUFFER_delete(json_to_send);
     BUFFER_delete(http_response);
+    STRING_delete(uri_path);
     return result;
 }
 
@@ -593,7 +593,7 @@ const char* hsm_client_http_edge_get_trusted_certificates(HSM_CLIENT_HANDLE hand
             LogError("send_http_workload_request failed");
             trusted_certificates = NULL;
         }
-        else if ((trusted_certificates = parse_json_certificate_response(http_response)) =  = NULL)
+        else if ((trusted_certificates = parse_json_certificate_response(http_response)) == NULL)
         {
             LogError("parse_json_certificate_response failed");
             trusted_certificates = NULL;

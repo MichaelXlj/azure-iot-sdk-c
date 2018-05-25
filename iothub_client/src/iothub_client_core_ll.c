@@ -988,8 +988,14 @@ IOTHUB_CLIENT_CORE_LL_HANDLE IoTHubClientCore_LL_Create(const IOTHUB_CLIENT_CONF
 #ifdef USE_EDGE_MODULES
 IOTHUB_CLIENT_CORE_LL_HANDLE IoTHubClientCore_LL_CreateFromEnvironment(const IOTHUB_CLIENT_CONFIG* config, const char* module_id)
 {
-    IOTHUB_CLIENT_CORE_LL_HANDLE result = IoTHubClientCore_LL_CreateImpl(config, module_id, true);
-    if (result != NULL)
+    IOTHUB_CLIENT_CORE_LL_HANDLE result;
+
+    if (module_id == NULL)
+    {
+        LogError("module_id cannot be NULL");
+        result = NULL;
+    }
+    else if ((result = IoTHubClientCore_LL_CreateImpl(config, module_id, true)) != NULL)
     {
         // Because the Edge Hub almost always use self-signed certificates, we need
         // to query it for the the certificate its using so we can trust it.
@@ -998,7 +1004,7 @@ IOTHUB_CLIENT_CORE_LL_HANDLE IoTHubClientCore_LL_CreateFromEnvironment(const IOT
 
         if (trustedCertificate == NULL)
         {
-            LogError("IoTHubClient_Auth_GetTrustedCertificates failed");
+            LogError("IoTHubClient_Auth_Get_TrustedCertificates failed");
             IoTHubClientCore_LL_Destroy(result);
             result = NULL;
         }
