@@ -159,18 +159,6 @@ DEVICE_AUTH_TYPE iothub_device_auth_get_type(IOTHUB_SECURITY_HANDLE handle)
     return result;
 }
 
-#ifdef USE_EDGE_MODULES
-const char* iothub_device_auth_get_trusted_certificates(IOTHUB_SECURITY_HANDLE handle)
-{
-    if (handle->hsm_client_get_trusted_certificates == NULL)
-    {
-        LogError("This authentication type does not support getting trusted certificates");
-        return NULL;
-    }
-    return handle->hsm_client_get_trusted_certificates(handle->hsm_client_handle);
-}
-#endif
-
 CREDENTIAL_RESULT* iothub_device_auth_generate_credentials(IOTHUB_SECURITY_HANDLE handle, const DEVICE_AUTH_CREDENTIAL_INFO* dev_auth_cred)
 {
     CREDENTIAL_RESULT* result;
@@ -362,3 +350,17 @@ CREDENTIAL_RESULT* iothub_device_auth_generate_credentials(IOTHUB_SECURITY_HANDL
     }
     return result;
 }
+
+#ifdef USE_EDGE_MODULES
+char* iothub_device_auth_get_trusted_certificates(IOTHUB_SECURITY_HANDLE handle)
+{
+    if (handle->hsm_client_get_trusted_certificates == NULL)
+    {
+        LogError("This authentication type does not support getting trusted certificates");
+        return NULL;
+    }
+    return handle->hsm_client_get_trusted_certificates(handle->hsm_client_handle);
+}
+#endif
+
+

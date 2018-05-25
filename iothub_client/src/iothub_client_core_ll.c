@@ -999,7 +999,7 @@ IOTHUB_CLIENT_CORE_LL_HANDLE IoTHubClientCore_LL_CreateFromEnvironment(const IOT
     {
         // Because the Edge Hub almost always use self-signed certificates, we need
         // to query it for the the certificate its using so we can trust it.
-        const char* trustedCertificate = IoTHubClient_Auth_Get_TrustedCertificates(result->authorization_module);
+        char* trustedCertificate = IoTHubClient_Auth_Get_TrustedCertificates(result->authorization_module);
         IOTHUB_CLIENT_RESULT setTrustResult;
 
         if (trustedCertificate == NULL)
@@ -1015,7 +1015,7 @@ IOTHUB_CLIENT_CORE_LL_HANDLE IoTHubClientCore_LL_CreateFromEnvironment(const IOT
             result = NULL;
         }
 
-        free((char*)trustedCertificate);
+        free(trustedCertificate);
     }
     return result;
 }

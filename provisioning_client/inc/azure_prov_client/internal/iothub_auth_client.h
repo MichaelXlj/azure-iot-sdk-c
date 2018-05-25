@@ -66,7 +66,7 @@ MOCKABLE_FUNCTION(, DEVICE_AUTH_TYPE, iothub_device_auth_get_type, IOTHUB_SECURI
 MOCKABLE_FUNCTION(, CREDENTIAL_RESULT*, iothub_device_auth_generate_credentials, IOTHUB_SECURITY_HANDLE, handle, const DEVICE_AUTH_CREDENTIAL_INFO*, dev_auth_cred);
 
 #ifdef USE_EDGE_MODULES
-MOCKABLE_FUNCTION(, const char*, iothub_device_auth_get_trusted_certificates, IOTHUB_SECURITY_HANDLE, handle);
+MOCKABLE_FUNCTION(, char*, iothub_device_auth_get_trusted_certificates, IOTHUB_SECURITY_HANDLE, handle);
 #endif
 
 

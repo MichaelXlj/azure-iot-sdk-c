@@ -529,9 +529,9 @@ int hsm_client_http_edge_sign_data(HSM_CLIENT_HANDLE handle, const unsigned char
     return result;
 }
 
-static const char* parse_json_certificate_response(BUFFER_HANDLE http_response)
+static char* parse_json_certificate_response(BUFFER_HANDLE http_response)
 {
-    const char* trusted_certificates;
+    char* trusted_certificates;
     const char* trusted_certificates_from_json;
     const char* http_response_str;
     JSON_Value* root_value = NULL;
@@ -568,9 +568,9 @@ static const char* parse_json_certificate_response(BUFFER_HANDLE http_response)
     return trusted_certificates;
 }
 
-const char* hsm_client_http_edge_get_trusted_certificates(HSM_CLIENT_HANDLE handle)
+char* hsm_client_http_edge_get_trusted_certificates(HSM_CLIENT_HANDLE handle)
 {
-    const char* trusted_certificates;
+    char* trusted_certificates;
     BUFFER_HANDLE http_response = NULL;
     STRING_HANDLE uri_path = NULL;
    

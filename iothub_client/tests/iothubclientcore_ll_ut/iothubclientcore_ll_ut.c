@@ -290,10 +290,10 @@ static IOTHUB_AUTHORIZATION_HANDLE my_IoTHubClient_Auth_Create(const char* devic
     return (IOTHUB_AUTHORIZATION_HANDLE)my_gballoc_malloc(1);
 }
 
-static const char* my_IoTHubClient_Auth_Get_TrustedCertificates(IOTHUB_AUTHORIZATION_HANDLE handle)
+static char* my_IoTHubClient_Auth_Get_TrustedCertificates(IOTHUB_AUTHORIZATION_HANDLE handle)
 {
     (void)handle;
-    return (const char*)my_gballoc_malloc(1);
+    return (char*)my_gballoc_malloc(1);
 }
 
 static void my_IoTHubClient_Auth_Destroy(IOTHUB_AUTHORIZATION_HANDLE handle)

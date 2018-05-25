@@ -537,7 +537,7 @@ SAS_TOKEN_STATUS IoTHubClient_Auth_Is_SasToken_Valid(IOTHUB_AUTHORIZATION_HANDLE
 
 
 #ifdef USE_EDGE_MODULES
-const char* IoTHubClient_Auth_Get_TrustedCertificates(IOTHUB_AUTHORIZATION_HANDLE handle)
+char* IoTHubClient_Auth_Get_TrustedCertificates(IOTHUB_AUTHORIZATION_HANDLE handle)
 {
     return iothub_device_auth_get_trusted_certificates(handle->device_auth_handle);
 }
