@@ -29,6 +29,8 @@ static const char* HSM_EDGE_SIGN_JSON_DATA = "data";
 static const char* HSM_EDGE_SIGN_JSON_DIGEST = "digest";
 static const char* HSM_EDGE_TRUSTED_CERTIFICATE_JSON_CERTIFICATE = "certificate";
 
+static const int HSM_HTTP_EDGE_MAXIMUM_REQUEST_TIME = 60; // 1 Minute
+
 
 #include "hsm_client_http_edge.h"
 
@@ -337,8 +339,6 @@ static void on_edge_hsm_http_connected(void* callback_ctx, HTTP_CALLBACK_REASON 
     }
 }
 
-static const int HSM_HTTP_EDGE_MAXIMUM_REQUEST_TIME = 60; // 1 Minute
-
 static int send_request_to_edge_workload(HTTP_CLIENT_HANDLE http_handle, HTTP_HEADERS_HANDLE http_headers_handle, const char* uri_path, BUFFER_HANDLE json_to_send, HSM_HTTP_WORKLOAD_CONTEXT* workload_context)
 {
     const unsigned char* json_to_send_str = BUFFER_u_char(json_to_send);
@@ -346,9 +346,21 @@ static int send_request_to_edge_workload(HTTP_CLIENT_HANDLE http_handle, HTTP_HE
     bool timed_out = false;
     HTTP_CLIENT_RESULT http_client_result;
 
-    const size_t json_to_send_str_len = (json_to_send_str != NULL) ? strlen((const char*)json_to_send_str) : 0;
+    size_t json_to_send_str_len;
+    HTTP_CLIENT_REQUEST_TYPE http_request_type;
 
-    if ((http_client_result = uhttp_client_execute_request(http_handle, HTTP_CLIENT_REQUEST_POST, uri_path, http_headers_handle, json_to_send_str, json_to_send_str_len, on_edge_hsm_http_recv, workload_context)) != HTTP_CLIENT_OK)
+    if (json_to_send_str != NULL)
+    {
+        json_to_send_str_len = strlen((const char*)json_to_send_str);
+        http_request_type = HTTP_CLIENT_REQUEST_POST;
+    }
+    else
+    {
+        json_to_send_str_len = 0;
+        http_request_type = HTTP_CLIENT_REQUEST_GET;
+    }
+
+    if ((http_client_result = uhttp_client_execute_request(http_handle, http_request_type, uri_path, http_headers_handle, json_to_send_str, json_to_send_str_len, on_edge_hsm_http_recv, workload_context)) != HTTP_CLIENT_OK)
     {
         LogError("uhttp_client_execute_request failed, result=%d", http_client_result);
     }
@@ -581,7 +593,7 @@ const char* hsm_client_http_edge_get_trusted_certificates(HSM_CLIENT_HANDLE hand
             LogError("send_http_workload_request failed");
             trusted_certificates = NULL;
         }
-        else if ((trusted_certificates = parse_json_certificate_response(http_response)) != NULL)
+        else if ((trusted_certificates = parse_json_certificate_response(http_response)) =  = NULL)
         {
             LogError("parse_json_certificate_response failed");
             trusted_certificates = NULL;
