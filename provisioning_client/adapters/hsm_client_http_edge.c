@@ -50,7 +50,8 @@ static HSM_CLIENT_HTTP_EDGE_INTERFACE http_edge_interface =
 
     hsm_client_http_edge_create,
     hsm_client_http_edge_destroy,
-    hsm_client_http_edge_sign_data
+    hsm_client_http_edge_sign_data,
+    hsm_client_http_edge_get_trusted_certificates
 };
 
 // This is the string we use to connect to the edge device itself.  An example will be 
@@ -511,3 +512,8 @@ int hsm_client_http_edge_sign_data(HSM_CLIENT_HANDLE handle, const unsigned char
     return result;
 }
 
+const char* hsm_client_http_edge_get_trusted_certificates(HSM_CLIENT_HANDLE handle)
+{
+    (void)handle;
+    return "TRUSTED-CERT!!";
+}

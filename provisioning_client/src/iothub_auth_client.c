@@ -30,6 +30,8 @@ typedef struct IOTHUB_SECURITY_INFO_TAG
     HSM_CLIENT_GET_CERTIFICATE hsm_client_get_cert;
     HSM_CLIENT_GET_ALIAS_KEY hsm_client_get_alias_key;
 
+    HSM_CLIENT_GET_TRUSTED_CERTIFICATES hsm_client_get_trusted_certificates;
+
     char* sas_token;
     char* x509_certificate;
     char* x509_alias_key;
@@ -98,7 +100,8 @@ IOTHUB_SECURITY_HANDLE iothub_device_auth_create()
             const HSM_CLIENT_HTTP_EDGE_INTERFACE* http_edge_interface = hsm_client_http_edge_interface();
             if (((result->hsm_client_create = http_edge_interface->hsm_client_http_edge_create) == NULL) ||
                 ((result->hsm_client_destroy = http_edge_interface->hsm_client_http_edge_destroy) == NULL) ||
-                ((result->hsm_client_sign_data = http_edge_interface->hsm_client_sign_with_identity) == NULL))
+                ((result->hsm_client_sign_data = http_edge_interface->hsm_client_sign_with_identity) == NULL) ||
+                ((result->hsm_client_get_trusted_certificates = http_edge_interface->hsm_client_get_trusted_certificates) == NULL))
             {
                 LogError("Invalid secure device interface");
                 free(result);
@@ -155,6 +158,18 @@ DEVICE_AUTH_TYPE iothub_device_auth_get_type(IOTHUB_SECURITY_HANDLE handle)
     }
     return result;
 }
+
+#ifdef USE_EDGE_MODULES
+const char* iothub_device_auth_get_trusted_certificates(IOTHUB_SECURITY_HANDLE handle)
+{
+    if (handle->hsm_client_get_trusted_certificates == NULL)
+    {
+        LogError("This authentication type does not support getting trusted certificates");
+        return NULL;
+    }
+    return handle->hsm_client_get_trusted_certificates(handle->hsm_client_handle);
+}
+#endif
 
 CREDENTIAL_RESULT* iothub_device_auth_generate_credentials(IOTHUB_SECURITY_HANDLE handle, const DEVICE_AUTH_CREDENTIAL_INFO* dev_auth_cred)
 {

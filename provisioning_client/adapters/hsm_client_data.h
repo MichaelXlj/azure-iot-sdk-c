@@ -27,6 +27,10 @@ typedef char* (*HSM_CLIENT_GET_CERTIFICATE)(HSM_CLIENT_HANDLE handle);
 typedef char* (*HSM_CLIENT_GET_ALIAS_KEY)(HSM_CLIENT_HANDLE handle);
 typedef char* (*HSM_CLIENT_GET_COMMON_NAME)(HSM_CLIENT_HANDLE handle);
 
+// Edge
+typedef const char* (*HSM_CLIENT_GET_TRUSTED_CERTIFICATES)(HSM_CLIENT_HANDLE handle);
+
+
 typedef struct HSM_CLIENT_TPM_INTERFACE_TAG
 {
     HSM_CLIENT_CREATE hsm_client_tpm_create;
@@ -54,6 +58,7 @@ typedef struct HSM_CLIENT_HTTP_EDGE_INTERFACE_TAG
     HSM_CLIENT_CREATE hsm_client_http_edge_create;
     HSM_CLIENT_DESTROY hsm_client_http_edge_destroy;
     HSM_CLIENT_SIGN_WITH_IDENTITY hsm_client_sign_with_identity;
+    HSM_CLIENT_GET_TRUSTED_CERTIFICATES hsm_client_get_trusted_certificates;
 } HSM_CLIENT_HTTP_EDGE_INTERFACE;
 #endif
 
