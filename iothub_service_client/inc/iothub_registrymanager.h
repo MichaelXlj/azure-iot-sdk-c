@@ -197,7 +197,6 @@ typedef struct IOTHUB_CONFIGURATION_TAG
     IOTHUB_REGISTRY_CONFIGURATION_METRICS metrics;                  //version 1+
     IOTHUB_REGISTRY_CONFIGURATION_METRICS systemMetrics;            //version 1+
 
-    const char* configurationId;
 } IOTHUB_CONFIGURATION;
 
 typedef struct IOTHUB_REGISTRY_CONFIGURATION_CREATE_TAG
