@@ -162,6 +162,73 @@ typedef struct IOTHUB_REGISTRY_MODULE_UPDATE_TAG
     const char* moduleId;                           //version 1+
 } IOTHUB_REGISTRY_MODULE_UPDATE;
 
+#define IOTHUB_CONFIGURATION_CONTENT_VERSION_1 1
+typedef struct IOTHUB_REGISTRY_CONFIGURATION_CONTENT_TAG
+{
+    const char* deviceContent;                    //version 1+
+    const char* moduleContent;                    //version 1+
+
+} IOTHUB_REGISTRY_CONFIGURATION_CONTENT;
+
+#define IOTHUB_CONFIGURATION_METRICS_VERSION_1 1
+typedef struct IOTHUB_REGISTRY_CONFIGURATION_METRICS_TAG
+{
+    MAP_HANDLE results;                          //version 1+
+    MAP_HANDLE queries;                          //version 1+
+
+} IOTHUB_REGISTRY_CONFIGURATION_METRICS;
+
+#define IOTHUB_CONFIGURATION_SCHEMA_VERSION_1 "1.0"
+typedef struct IOTHUB_CONFIGURATION_TAG
+{
+    const char* schemaVersion;                                      //version 1+
+    const char* configurationId;                                    //version 1+
+    const char* targetCondition;                                    //version 1+
+    const char* eTag;                                               //version 1+
+    int priority;                                                   //version 1+
+
+    IOTHUB_REGISTRY_CONFIGURATION_CONTENT content;                  //version 1+
+    MAP_HANDLE labels;                                              //version 1+
+
+    const char* contentType;                                        //version 1+
+    const char* createdTimeUtc;
+    const char* lastUpdatedTimeUtc;
+
+    IOTHUB_REGISTRY_CONFIGURATION_METRICS metrics;                  //version 1+
+    IOTHUB_REGISTRY_CONFIGURATION_METRICS systemMetrics;            //version 1+
+
+    const char* configurationId;
+} IOTHUB_CONFIGURATION;
+
+typedef struct IOTHUB_REGISTRY_CONFIGURATION_CREATE_TAG
+{
+    const char* schemaVersion;                                      //version 1+
+    const char* configurationId;                                    //version 1+
+    const char* targetCondition;                                    //version 1+
+    int priority;                                                   //version 1+
+
+    IOTHUB_REGISTRY_CONFIGURATION_CONTENT configurationContent;     //version 1+
+    MAP_HANDLE configurationLabels;                                 //version 1+
+
+    IOTHUB_REGISTRY_CONFIGURATION_METRICS metrics;                  //version 1+
+    IOTHUB_REGISTRY_CONFIGURATION_METRICS systemMetrics;            //version 1+
+    
+} IOTHUB_REGISTRY_CONFIGURATION_CREATE;
+
+typedef struct IOTHUB_REGISTRY_CONFIGURATION_UPDATE_TAG
+{
+    const char* schemaVersion;                                      //version 1+
+    const char* configurationId;                                    //version 1+
+    const char* targetCondition;                                    //version 1+
+    int priority;                                                   //version 1+
+
+    MAP_HANDLE configurationLabels;                                 //version 1+
+
+    IOTHUB_REGISTRY_CONFIGURATION_METRICS metrics;                  //version 1+
+    IOTHUB_REGISTRY_CONFIGURATION_METRICS systemMetrics;            //version 1+
+
+} IOTHUB_REGISTRY_CONFIGURATION_UPDATE;
+
 /** @brief Structure to store IoTHub authentication information
 */
 typedef struct IOTHUB_REGISTRYMANAGER_TAG
@@ -309,6 +376,50 @@ extern IOTHUB_REGISTRYMANAGER_RESULT IoTHubRegistryManager_DeleteModule(IOTHUB_R
 * @return   IOTHUB_REGISTRYMANAGER_RESULT_OK upon success or an error code upon failure.
 */
 extern IOTHUB_REGISTRYMANAGER_RESULT IoTHubRegistryManager_GetModuleList(IOTHUB_REGISTRYMANAGER_HANDLE registryManagerHandle, const char* deviceId, SINGLYLINKEDLIST_HANDLE moduleList, int module_version);
+
+/**
+* @brief	Creates a configuration on IoT Hub.
+*
+* @param	registryManagerHandle   The handle created by a call to the create function.
+* @param    configurationCreate     IOTHUB_REGISTRY_CONFIGURATION_CREATE structure containing
+*                                   the new configuration Id and other optional parameters
+* @param    configuration           Input parameter, if it is not NULL will contain the created configuration info structure
+*
+* @return	IOTHUB_REGISTRYMANAGER_RESULT_OK upon success or an error code upon failure.
+*/
+extern IOTHUB_REGISTRYMANAGER_RESULT IoTHubRegistryManager_CreateConfiguration(IOTHUB_REGISTRYMANAGER_HANDLE registryManagerHandle, const IOTHUB_REGISTRY_CONFIGURATION_CREATE* configurationCreate, IOTHUB_CONFIGURATION* configuration);
+
+/**
+* @brief    Gets configuration info for a given configuration.
+*
+* @param    registryManagerHandle   The handle created by a call to the create function.
+* @param    configurationId         The Id of the requested configuration.
+* @param    configuration           Input parameter, if it is not NULL will contain the requested configuration info structure
+*
+* @return   IOTHUB_REGISTRYMANAGER_RESULT_OK upon success or an error code upon failure.
+*/
+extern IOTHUB_REGISTRYMANAGER_RESULT IoTHubRegistryManager_GetConfiguration(IOTHUB_REGISTRYMANAGER_HANDLE registryManagerHandle, const char* configurationId, IOTHUB_CONFIGURATION* configuration);
+
+/**
+* @brief    Updates a configuration on IoT Hub.
+*
+* @param    registryManagerHandle   The handle created by a call to the create function.
+* @param    configurationUpdate     IOTHUB_REGISTRY_CONFIGURATION_UPDATE structure containing
+*                                   the new configuration info. Note that configurationContent cannot be updated.
+*
+* @return   IOTHUB_REGISTRYMANAGER_RESULT_OK upon success or an error code upon failure.
+*/
+extern IOTHUB_REGISTRYMANAGER_RESULT IoTHubRegistryManager_UpdateConfiguration(IOTHUB_REGISTRYMANAGER_HANDLE registryManagerHandle, IOTHUB_REGISTRY_CONFIGURATION_UPDATE* configurationUpdate);
+
+/**
+* @brief    Deletes a given configuration.
+*
+* @param    registryManagerHandle   The handle created by a call to the create function.
+* @param    configurationId    The Id of the configuration to delete.
+*
+* @return   IOTHUB_REGISTRYMANAGER_RESULT_OK upon success or an error code upon failure.
+*/
+extern IOTHUB_REGISTRYMANAGER_RESULT IoTHubRegistryManager_DeleteConfiguration(IOTHUB_REGISTRYMANAGER_HANDLE registryManagerHandle, const char* configurationId);
 
 
 /* DEPRECATED: THE FOLLOWING APIS ARE DEPRECATED, AND ARE ONLY BEING KEPT FOR BACK COMPAT. PLEASE USE _EX EQUIVALENT ABOVE */
